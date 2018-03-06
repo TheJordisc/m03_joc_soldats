@@ -22,8 +22,8 @@ public class Sprite
     private boolean goingUp=false;
 
     public Sprite() {
-        width=5;
-        height=5;
+        width=50;
+        height=50;
         positionX = 0;
         positionY = 0;
         goingRight=true;
