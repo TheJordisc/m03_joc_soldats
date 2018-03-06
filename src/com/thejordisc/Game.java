@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 // Animation of Earth rotating around the sun. (Hello, world!)
 public class Game extends Application {
 
-    Sprite ball = new Sprite();
+    Sprite mario = new Sprite();
 
     public static void main(String[] args)
     {
@@ -41,7 +41,7 @@ public class Game extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        ball.setImage("/com/thejordisc/ball.png");
+        mario.setImage("/com/thejordisc/ball.png");
 
         long lastNanoTime = System.nanoTime();
 
@@ -51,13 +51,13 @@ public class Game extends Application {
             {
                 double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
 
-                ball.clear(gc);
+                mario.clear(gc);
 
                 canvas.setWidth(theScene.getWidth());
                 canvas.setHeight(theScene.getHeight());
 
-                ball.move(canvas);
-                ball.render(gc);
+                mario.move(canvas);
+                mario.render(gc);
             }
         }.start();
         
@@ -65,8 +65,8 @@ public class Game extends Application {
     }
 
     private void mouseCliked(MouseEvent e) {
-        if (ball.isClicked(new Point2D(e.getSceneX(),e.getSceneY()))){
-            ball.setVelocityY(ball.getVelocityY()+10);
+        if (mario.isClicked(new Point2D(e.getSceneX(),e.getSceneY()))){
+            mario.setVelocityY(mario.getVelocityY()+10);
         }
     }
 
