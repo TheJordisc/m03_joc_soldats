@@ -115,8 +115,8 @@ public class Sprite
         }
 
         if (positionY > canvas.getHeight()-height) {
-            goingUp=true;
-            goingDown=false;
+           goingUp=true;
+           goingDown=false;
         }
 
         if (goingLeft) {
