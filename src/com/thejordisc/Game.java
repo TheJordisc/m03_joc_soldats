@@ -17,7 +17,7 @@ import java.util.List;
 // Animation of Earth rotating around the sun. (Hello, world!)
 public class Game extends Application {
 
-    Sprite mario = new Sprite();
+    Mario mario = new Mario();
 
     List<Goomba> goombas = new ArrayList<>();
 
@@ -49,7 +49,7 @@ public class Game extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        mario.setImage("/com/thejordisc/ball.png");
+        mario.setImage("https://sickr.files.wordpress.com/2011/11/mario_kart_knex.jpg");
 
         for (int i = 0; i < 5; i++) {
             Goomba goomba = new Goomba();

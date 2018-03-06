@@ -10,8 +10,8 @@ import javafx.scene.paint.Color;
 public class Sprite
 {
     private Image image;
-     double positionX;
-     double positionY;
+    double positionX;
+    double positionY;
     private double velocityX;
     private double velocityY;
     private double width;
@@ -91,41 +91,6 @@ public class Sprite
     }
 
     public void move(Canvas canvas, double time) {
-        if (positionX > canvas.getWidth()-width) {
-            goingLeft=true;
-            goingRight=false;
-        }
-
-        if (positionX < 0) {
-            goingRight=true;
-            goingLeft=false;
-        }
-
-        if (positionY < 0) {
-            goingDown=true;
-            goingUp=false;
-        }
-
-        if (positionY > canvas.getHeight()-height) {
-           goingUp=true;
-           goingDown=false;
-        }
-
-        if (goingLeft) {
-            positionX+=velocityX*-1;
-        }
-
-        if (goingRight) {
-            positionX+=velocityX;
-        }
-
-        if (goingUp) {
-            positionY+=velocityY*-1;
-        }
-
-        if (goingDown) {
-            positionY+=velocityY;
-        }
 
     }
 
@@ -170,4 +135,5 @@ public class Sprite
     public void setWidth(double width) {
         this.width = width;
     }
+
 }
