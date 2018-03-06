@@ -21,6 +21,8 @@ public class Game extends Application {
 
     List<Goomba> goombas = new ArrayList<>();
 
+    long lastNanoTime;
+
     public static void main(String[] args)
     {
         launch(args);
@@ -56,19 +58,20 @@ public class Game extends Application {
             int randomPos=(int)(Math.random() * rangePos) + 0;
             goomba.setPosition(randomPos,0-goomba.getHeight());
 
-            int rangeVel = ((20 - 1) + 1);
-            int randomVel = (int)(Math.random() * rangeVel) + 1;
+            int rangeVel = ((50 - 20) + 1);
+            int randomVel = (int)(Math.random() * rangeVel) + 20;
             goomba.setVelocityY(randomVel);
             goombas.add(goomba);
         }
 
-        long lastNanoTime = System.nanoTime();
+        lastNanoTime = System.nanoTime();
 
         new AnimationTimer()
         {
             public void handle(long currentNanoTime)
             {
                 double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
+                lastNanoTime=currentNanoTime;
 
                 mario.clear(gc);
 
@@ -80,12 +83,12 @@ public class Game extends Application {
                 canvas.setWidth(theScene.getWidth());
                 canvas.setHeight(theScene.getHeight());
 
-                mario.move(canvas);
+                mario.move(canvas,elapsedTime);
                 mario.render(gc);
 
                 for (Goomba g :
                         goombas) {
-                    g.move(canvas);
+                    g.move(canvas,elapsedTime);
                     g.render(gc);
                 }
             }
