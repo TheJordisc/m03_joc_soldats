@@ -9,11 +9,17 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import net.xqj.exist.bin.G;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // Animation of Earth rotating around the sun. (Hello, world!)
 public class Game extends Application {
 
     Sprite mario = new Sprite();
+
+    List<Goomba> goombas = new ArrayList<>();
 
     public static void main(String[] args)
     {
@@ -43,6 +49,13 @@ public class Game extends Application {
 
         mario.setImage("/com/thejordisc/ball.png");
 
+        for (int i = 0; i < 5; i++) {
+            Goomba goomba = new Goomba();
+            goomba.setImage("/com/thejordisc/goomba.gif");
+            goomba.setPosition(random,0-goomba.get);
+            goombas.add(goomba);
+        }
+
         long lastNanoTime = System.nanoTime();
 
         new AnimationTimer()
@@ -58,6 +71,12 @@ public class Game extends Application {
 
                 mario.move(canvas);
                 mario.render(gc);
+
+                for (Goomba g :
+                        goombas) {
+                    g.move(canvas);
+                    g.render(gc);
+                }
             }
         }.start();
         
