@@ -92,6 +92,7 @@ public class Sprite
 
     public void move(Canvas canvas, double time) {
 
+
     }
 
     public void show(GraphicsContext context) {

@@ -98,9 +98,13 @@ public class Game extends Application {
     }
 
     private void mouseCliked(MouseEvent e) {
-        if (mario.isClicked(new Point2D(e.getSceneX(),e.getSceneY()))){
-            mario.setVelocityY(mario.getVelocityY()+10);
+        for (Goomba g :
+                goombas) {
+            if (g.isClicked(new Point2D(e.getSceneX(),e.getSceneY()))){
+               g.setVelocityY(0);
+            }
         }
+
     }
 
 

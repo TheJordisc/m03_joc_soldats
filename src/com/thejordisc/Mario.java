@@ -4,23 +4,27 @@ import javafx.scene.canvas.Canvas;
 
 public class Mario extends Sprite{
     private boolean reset=false;
-//TODO: acabar
+
+    public Mario() {
+        positionY=300;
+        setVelocityX(2);
+    }
 
     @Override
     public void move(Canvas canvas, double time) {
-        if (positionX > canvas.getWidth()- getWidth()) {
+        if (positionX > canvas.getWidth()+ getWidth()) {
             reset=true;
-
         }
 
         if (positionX < 0) {
-
             reset=false;
         }
 
         if (reset) {
-            positionX= 0;
+            positionX=0-getWidth();
+            reset=false;
+        }else{
+            positionX+= getVelocityX() *1;
         }
-
     }
 }
