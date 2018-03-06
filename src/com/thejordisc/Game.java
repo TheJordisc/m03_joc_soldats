@@ -52,9 +52,13 @@ public class Game extends Application {
         for (int i = 0; i < 5; i++) {
             Goomba goomba = new Goomba();
             goomba.setImage("/com/thejordisc/goomba.gif");
-            int range = (int) ((canvas.getWidth()-goomba.getWidth() - 0) + 1);
-            int random=(int)(Math.random() * range) + 0;
-            goomba.setPosition(random,0-goomba.getHeight());
+            int rangePos = (int) ((canvas.getWidth()-goomba.getWidth() - 0) + 1);
+            int randomPos=(int)(Math.random() * rangePos) + 0;
+            goomba.setPosition(randomPos,0-goomba.getHeight());
+
+            int rangeVel = ((20 - 1) + 1);
+            int randomVel = (int)(Math.random() * rangeVel) + 1;
+            goomba.setVelocityY(randomVel);
             goombas.add(goomba);
         }
 
@@ -67,6 +71,11 @@ public class Game extends Application {
                 double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
 
                 mario.clear(gc);
+
+                for (Goomba g :
+                        goombas) {
+                    g.clear(gc);
+                }
 
                 canvas.setWidth(theScene.getWidth());
                 canvas.setHeight(theScene.getHeight());

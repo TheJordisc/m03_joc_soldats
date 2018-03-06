@@ -85,18 +85,12 @@ public class Sprite
         velocityY += y;
     }
 
-    public void update(double time)
-    {
-        positionX += velocityX * time;
-        positionY += velocityY * time;
-    }
-
     public void render(GraphicsContext gc)
     {
         gc.drawImage( image, positionX, positionY, width, height );
     }
 
-    public void move(Canvas canvas) {
+    public void move(Canvas canvas, double time) {
         if (positionX > canvas.getWidth()-width) {
             goingLeft=true;
             goingRight=false;
