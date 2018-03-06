@@ -52,7 +52,9 @@ public class Game extends Application {
         for (int i = 0; i < 5; i++) {
             Goomba goomba = new Goomba();
             goomba.setImage("/com/thejordisc/goomba.gif");
-            goomba.setPosition(random,0-goomba.get);
+            int range = (int) ((canvas.getWidth()-goomba.getWidth() - 0) + 1);
+            int random=(int)(Math.random() * range) + 0;
+            goomba.setPosition(random,0-goomba.getHeight());
             goombas.add(goomba);
         }
 

@@ -22,8 +22,8 @@ public class Sprite
     private boolean goingUp=false;
 
     public Sprite() {
-        width=200;
-        height=200;
+        width=5;
+        height=5;
         positionX = 0;
         positionY = 0;
         goingRight=true;
@@ -35,8 +35,6 @@ public class Sprite
     public void setImage(Image i)
     {
         image = i;
-        width = i.getWidth();
-        height = i.getHeight();
     }
 
     public void setImage(String filename)
@@ -95,7 +93,7 @@ public class Sprite
 
     public void render(GraphicsContext gc)
     {
-        gc.drawImage( image, positionX, positionY );
+        gc.drawImage( image, positionX, positionY, width, height );
     }
 
     public void move(Canvas canvas) {
