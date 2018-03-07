@@ -16,18 +16,13 @@ public class Sprite
     private double velocityY;
     private double width;
     private double height;
-    private boolean goingLeft=false;
-    private boolean goingRight=false;
-    private boolean goingDown=false;
-    private boolean goingUp=false;
 
     public Sprite() {
         width=50;
         height=50;
         positionX = 0;
         positionY = 0;
-        goingRight=true;
-        goingDown=true;
+
         velocityX = 5;
         velocityY = 5;
     }

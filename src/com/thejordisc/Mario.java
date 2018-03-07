@@ -8,6 +8,7 @@ public class Mario extends Sprite{
     public Mario() {
         positionY=300;
         setVelocityX(2);
+        this.setImage("https://sickr.files.wordpress.com/2011/11/mario_kart_knex.jpg");
     }
 
     @Override
