@@ -6,7 +6,7 @@ public class Goomba extends Sprite {
 
     public Goomba() {
         super();
-        this.setImage("/com/thejordisc/goomba.gif");
+        this.setImage("/com/thejordisc/Sprites/goomba.png");
     }
 
     @Override

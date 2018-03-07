@@ -59,7 +59,9 @@ public class Game extends Application {
         gc = canvas.getGraphicsContext2D();
 
         mario= new Mario();
-        newGoomba();
+        mario.setWidth(100);
+
+        createGoombas();
 
         lastNanoTime = System.nanoTime();
 
@@ -117,7 +119,7 @@ public class Game extends Application {
         mario.clear(gc);
     }
 
-    private void newGoomba() {
+    private void createGoombas() {
         totalGoomba=(int)(Math.random() * 12) + 6;
         for (int i = 0; i < totalGoomba; i++) {
             Goomba goomba = new Goomba();
