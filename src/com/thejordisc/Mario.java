@@ -6,7 +6,7 @@ public class Mario extends Sprite{
     private boolean reset=false;
 
     public Mario() {
-        positionY=300;
+        positionY=352;
         setVelocityX(2);
         this.setImage("/com/thejordisc/Sprites/mario.png");
     }

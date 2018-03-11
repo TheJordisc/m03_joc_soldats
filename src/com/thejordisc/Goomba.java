@@ -12,5 +12,10 @@ public class Goomba extends Sprite {
     @Override
     public void move(Canvas canvas, double time) {
         this.setPosition(this.getPositionX(),getPositionY()+getVelocityY()*time);
+        if (this.positionY>canvas.getHeight()){
+            int rangePos = (int) ((canvas.getWidth()-this.getWidth() - 0) + 1);
+            int randomPos=(int)(Math.random() * rangePos) + 0;
+            setPosition(randomPos,0-this.getHeight());
+        }
     }
 }
