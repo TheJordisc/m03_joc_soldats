@@ -27,7 +27,7 @@ import java.util.List;
 
 public class Game extends Application {
 
-    //TODO: fix clear, clean code, implements ITERATOR instead for (Goomba g : new ArrayList<>(goombas)) 
+    //TODO: clean code, implements ITERATOR instead for (Goomba g : new ArrayList<>(goombas))
 
     Mario mario;
     int score=0;
@@ -36,10 +36,11 @@ public class Game extends Application {
     Canvas canvas;
     long lastNanoTime;
     int totalGoomba;
+    int goombaClicked=0;
     Label labelScore = new Label(""+score);
     Label labelLevel = new Label("LEVEL "+level);
-    Label labelTotalScore = new Label("LEVEL "+level);
     Label labelLevelUp = new Label("");
+    Label lastRoundScore = new Label("");
     GraphicsContext gc;
     double elapsedTime;
     Scene theScene;
@@ -87,17 +88,18 @@ public class Game extends Application {
             }
 
         });
-        root.getChildren().addAll(canvas,labelScore,labelLevel,labelTotalScore,labelLevelUp,startButton);
+        root.getChildren().addAll(canvas,labelScore,labelLevel,labelLevelUp,startButton,lastRoundScore);
         StackPane.setAlignment(labelLevel, Pos.TOP_LEFT);
         StackPane.setAlignment(labelScore, Pos.TOP_CENTER);
-        StackPane.setAlignment(labelTotalScore, Pos.TOP_RIGHT);
         StackPane.setAlignment(labelLevelUp, Pos.CENTER);
+        StackPane.setAlignment(lastRoundScore, Pos.BOTTOM_CENTER);
 
         labelLevel.setTextFill(Color.web("#FFFFFF"));
         labelScore.setTextFill(Color.web("#FFFFFF"));
-        labelTotalScore.setTextFill(Color.web("#FFFFFF"));
         labelLevelUp.setTextFill(Color.web("#FF0000"));
+        lastRoundScore.setTextFill(Color.web("#0000FF"));
         labelLevelUp.setFont(new Font(MAX_FONT_SIZE));
+        lastRoundScore.setFont(new Font(MAX_FONT_SIZE));
 
         image = new Image("/com/thejordisc/Sprites/bg.png");
         pattern = new ImagePattern(image);
@@ -105,7 +107,6 @@ public class Game extends Application {
 
         gc = canvas.getGraphicsContext2D();
         labelLevel.autosize();
-
 
         totalGoomba=(int)(Math.random() * 12) + 6;
 
@@ -121,15 +122,16 @@ public class Game extends Application {
                 updateWindowSize();
 
                 if (start){
+                    lastRoundScore.setText("");
                     clearSprites();
                     renderSprites();
                     moveSprites();
                     checkSpriteCollision();
                     updateLevel();
+                    System.out.println(goombas.size());
                 }
                 labelLevel.setText("LEVEL "+level);
                 labelScore.setText("LEVEL SCORE "+score);
-                labelTotalScore.setText("TOTAL SCORE "+score*level);
             }
         }.start();
         
@@ -138,10 +140,9 @@ public class Game extends Application {
 
 
     private void updateLevel() {
-        if (score==totalGoomba){
+        if (goombaClicked==totalGoomba){
             level++;
             labelLevelUp.setText("LEVEL UP");
-            score=0;
             for (Goomba g :
                     goombas) {
                 int rangePos = (int) ((canvas.getWidth()-g.getWidth() - 0) + 1);
@@ -152,6 +153,7 @@ public class Game extends Application {
                 int randomVel = (int)(Math.random() * rangeVel) + 20;
                 g.setVelocityY(randomVel*level);
             }
+            goombaClicked=0;
         }
     }
 
@@ -179,12 +181,7 @@ public class Game extends Application {
     }
 
     private void clearSprites() {
-        for (Goomba g :
-                goombas) {
-            g.clear(gc);
-        }
-        mario.clear(gc);
-
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
     private void createGoomba() {
@@ -206,10 +203,10 @@ public class Game extends Application {
         //TODO: implements iterator
         for (Goomba g : new ArrayList<>(goombas)) {
             if (g.isClicked(new Point2D(e.getSceneX(),e.getSceneY()))){
-                System.out.println(e.getSceneY());
                 labelLevelUp.setText("");
                 goombas.remove(g);
                 score++;
+                goombaClicked++;
                 createGoomba();
             }
         }
@@ -225,8 +222,10 @@ public class Game extends Application {
     }
 
     private void resetGame() {
+        lastRoundScore.setText("TOTAL SCORE "+score*level);
         score=0;
         level=1;
+        goombaClicked=0;
         mario.positionX=0;
         mario.setVelocityX(2);
         start=false;
@@ -240,6 +239,7 @@ public class Game extends Application {
             int randomVel = (int)(Math.random() * rangeVel) + 20;
             g.setVelocityY(randomVel*level);
         }
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         startButton.setVisible(true);
     }
 }
