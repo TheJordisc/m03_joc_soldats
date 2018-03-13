@@ -3,27 +3,28 @@ package com.thejordisc;
 import javafx.scene.canvas.Canvas;
 
 public class Mario extends Sprite{
-    private boolean reset=false;
+    private boolean resetPosition =false;
 
     public Mario() {
-        positionY=352;
+        positionY=280;
         setVelocityX(2);
+        this.setWidth(100);
         this.setImage("/com/thejordisc/Sprites/mario.png");
     }
 
     @Override
     public void move(Canvas canvas, double time) {
         if (positionX > canvas.getWidth()+ getWidth()) {
-            reset=true;
+            resetPosition =true;
         }
 
         if (positionX < 0) {
-            reset=false;
+            resetPosition =false;
         }
 
-        if (reset) {
+        if (resetPosition) {
             positionX=0-getWidth();
-            reset=false;
+            resetPosition =false;
         }else{
             positionX+= getVelocityX() *1;
         }
