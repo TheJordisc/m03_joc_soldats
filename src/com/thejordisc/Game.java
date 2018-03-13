@@ -33,10 +33,10 @@ public class Game extends Application {
     private Mario mario;
     private Goomba goomba;
     private List<Goomba> goombas;
-    private int score, level, goombaClicked;
+    private int score, level;
     private Canvas canvas;
     private long lastNanoTime;
-    private Label labelScore,labelLevel,labelLevelUp,lastRoundScore;
+    private Label labelScore,labelLevel,labelLevelUp;
     private GraphicsContext gc;
     private double elapsedTime;
     private Scene theScene;
@@ -78,7 +78,7 @@ public class Game extends Application {
         startButton = new Button("Start new game");
         createStartButtonListener();
 
-        root.getChildren().addAll(canvas,labelScore,labelLevel,labelLevelUp,startButton,lastRoundScore);
+        root.getChildren().addAll(canvas,labelScore,labelLevel,labelLevelUp,startButton);
 
         new AnimationTimer()
         {
@@ -93,9 +93,11 @@ public class Game extends Application {
                     renderSprites();
                     moveSprites();
                     checkSpriteCollision();
-                    updateLevel();
                     labelLevel.setText("LEVEL "+level);
                     labelScore.setText("SCORE "+score);
+                }
+                if (mario.positionX > canvas.getWidth()+ mario.getWidth()){
+                updateLevel();
                 }
             }
         }.start();
@@ -106,7 +108,6 @@ public class Game extends Application {
         labelScore = new Label("");
         labelLevel = new Label("");
         labelLevelUp = new Label("");
-        lastRoundScore = new Label("");
     }
 
     private void setBackgroundImage() {
@@ -131,7 +132,6 @@ public class Game extends Application {
         mario.positionX=0;
         score=0;
         level=1;
-        goombaClicked=0;
         startButtonPressed =false;
         labelLevelUp.setText("");
     }
@@ -148,15 +148,11 @@ public class Game extends Application {
         labelLevelUp.setTextFill(Color.web("#FF0000"));
         labelLevelUp.setFont(new Font(MAX_FONT_SIZE));
         StackPane.setAlignment(labelLevelUp, Pos.CENTER);
-
-        lastRoundScore.setTextFill(Color.web("#0000FF"));
-        lastRoundScore.setFont(new Font(MAX_FONT_SIZE));
-        StackPane.setAlignment(lastRoundScore, Pos.BOTTOM_CENTER);
     }
 
     private void updateLevel() {
-        if (goombaClicked==TOTAL_GOOMBA){
             level++;
+            score+=10;
             labelLevelUp.setText("LEVEL UP");
             for (Goomba g :
                     goombas) {
@@ -168,8 +164,6 @@ public class Game extends Application {
                 int randomVel = (int)(Math.random() * rangeVel) + 20;
                 g.setVelocityY(randomVel*level);
             }
-            goombaClicked=0;
-        }
     }
 
    /* private void updateWindowSize() {
@@ -208,6 +202,7 @@ public class Game extends Application {
         int randomVel = (int)(Math.random() * rangeVel) + 20;
         goomba.setVelocityY(randomVel*level);
         goombas.add(goomba);
+
     }
 
     private void mouseCliked(MouseEvent e) {
@@ -217,7 +212,6 @@ public class Game extends Application {
                 labelLevelUp.setText("");
                 goombas.remove(g);
                 score++;
-                goombaClicked++;
                 createGoomba();
             }
         }
@@ -236,7 +230,6 @@ public class Game extends Application {
     private void GameOver() {
         clearScreen();
         labelLevelUp.setText("");
-        lastRoundScore.setText("TOTAL SCORE "+score);
         setNewGameVariables();
         goombas.clear();
         createGoomba();
