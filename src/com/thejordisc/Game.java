@@ -19,6 +19,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -132,7 +133,7 @@ public class Game extends Application {
         mario.positionX=0;
         score=0;
         level=1;
-        startButtonPressed =false;
+        startButtonPressed=false;
         labelLevelUp.setText("");
     }
 
@@ -206,13 +207,15 @@ public class Game extends Application {
     }
 
     private void mouseCliked(MouseEvent e) {
-        //TODO: implements iterator
-        for (Goomba g : new ArrayList<>(goombas)) {
-            if (g.isClicked(new Point2D(e.getSceneX(),e.getSceneY()))){
+        Iterator<Goomba> i = goombas.iterator();
+        while (i.hasNext()) {
+            Goomba g = i.next(); // must be called before you can call i.remove()
+            if (g.isClicked(new Point2D(e.getSceneX(), e.getSceneY()))) {
                 labelLevelUp.setText("");
-                goombas.remove(g);
+                i.remove();
                 score++;
                 createGoomba();
+                break; //break if element is unique
             }
         }
     }
