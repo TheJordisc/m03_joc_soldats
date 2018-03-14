@@ -3,7 +3,7 @@ package com.thejordisc;
 import javafx.scene.canvas.Canvas;
 
 public class Mario extends Sprite{
-    private boolean resetPosition =false;
+    private boolean resetPosition=false;
 
     public Mario() {
         positionY=280;
@@ -24,9 +24,10 @@ public class Mario extends Sprite{
 
         if (resetPosition) {
             positionX=0-getWidth();
-            resetPosition =false;
+            resetPosition=false;
         }else{
             positionX+= getVelocityX() *1;
         }
     }
+
 }
