@@ -1,4 +1,4 @@
-package com.thejordisc;
+package com.goombascape;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
@@ -86,17 +86,7 @@ public class Sprite
     }
 
     public void move(Canvas canvas, double time) {
-
-
-    }
-
-    public void show(GraphicsContext context) {
-        context.setFill(Color.GREEN);
-        context.fillOval(positionX,positionY,width,height);
-    }
-
-    public void clear(GraphicsContext gc) {
-        gc.clearRect(positionX,positionY,width,height);
+        //Overrided by subclasses
     }
 
     public Rectangle2D getBoundary()

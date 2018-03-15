@@ -1,9 +1,10 @@
-package com.thejordisc;
+package com.goombascape;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -32,7 +33,6 @@ public class Game extends Application {
     private final int TOTAL_GOOMBA = 10;
 
     private Mario mario;
-    private Goomba goomba;
     private List<Goomba> goombas;
     private int score, level;
     private Canvas canvas;
@@ -42,9 +42,10 @@ public class Game extends Application {
     private double elapsedTime;
     private Scene theScene;
     private Image backgroundImage;
-    private boolean startButtonPressed;
+    private boolean gameIsRunning;
     private StackPane root;
     private Button startButton;
+    private long levelUpTime;
 
     public static void main(String[] args)
     {
@@ -53,55 +54,83 @@ public class Game extends Application {
 
     @Override
     public void start(Stage theStage) {
+        //Prepare scene and canvas
+
         root = new StackPane();
         theScene = new Scene( root );
 
-        theStage.setTitle( "Goomba Scape" );
-        theStage.setScene( theScene );
-        theStage.setWidth(STAGE_WIDTH);
-        theStage.setHeight(STAGE_HEIGHT);
-        theStage.setResizable(false);
+        prepareStage(theStage);
 
         canvas = new Canvas(theStage.getWidth(),theStage.getHeight());
         canvas.setOnMouseClicked(this::mouseCliked);
 
-        goombas = new ArrayList<>();
+        gc = canvas.getGraphicsContext2D();
+
+        // Declare sprites
+
+        goombas = new ArrayList<Goomba>();
         mario= new Mario();
+
+        //Prepare new game and GUI
 
         initLabels();
         labelsSetStyle();
         setBackgroundImage();
         setNewGameVariables();
 
-        gc = canvas.getGraphicsContext2D();
-        lastNanoTime = System.nanoTime();
 
-        startButton = new Button("Start new game");
+
+        startButton = new Button("START");
+        startButton.setPadding(new Insets(25));
+        startButton.setFont(new Font("Arial", 50));
         createStartButtonListener();
 
         root.getChildren().addAll(canvas,labelScore,labelLevel,labelLevelUp,startButton);
 
+        //Prepare start time
+        lastNanoTime = System.nanoTime();
         new AnimationTimer()
         {
             public void handle(long currentNanoTime)
             {
+                //Update time
                 elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
                 lastNanoTime=currentNanoTime;
-                //updateWindowSize();
 
-                if (startButtonPressed){
+                //Game is running and computes graphic movements
+                if (gameIsRunning){
                     clearScreen();
-                    renderSprites();
-                    moveSprites();
-                    checkSpriteCollision();
-                    labelLevel.setText("LEVEL "+level);
-                    labelScore.setText("SCORE "+score);
+                    moveAndRenderSprites();
+                    checkSpriteCollision(mario);
+                    updateLabels();
+
+                    if (mario.isReachedGoal()){
+                        levelUpTime=currentNanoTime;
+                        mario.setReachedGoal(false);
+                        updateLevel();
+                    }
+
+                    if (currentNanoTime/1000000000.0 >= levelUpTime/1000000000.0 + 3) {
+                        labelLevelUp.setVisible(false);
+                    }
                 }
-                if (mario.positionX > canvas.getWidth()+ mario.getWidth()){
-                updateLevel();
-                }
+
             }
         }.start();
+
+    }
+
+    private void updateLabels() {
+        labelLevel.setText("LEVEL "+level);
+        labelScore.setText("SCORE "+score);
+    }
+
+    private void prepareStage(Stage theStage) {
+        theStage.setTitle( "Goomba Scape" );
+        theStage.setScene( theScene );
+        theStage.setWidth(STAGE_WIDTH);
+        theStage.setHeight(STAGE_HEIGHT);
+        theStage.setResizable(false);
         theStage.show();
     }
 
@@ -112,7 +141,7 @@ public class Game extends Application {
     }
 
     private void setBackgroundImage() {
-        backgroundImage = new Image("/com/thejordisc/Sprites/bg.png");
+        backgroundImage = new Image("/com/goombascape/sprites/bg.png");
         root.setBackground(new Background(new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true))));
     }
 
@@ -120,31 +149,39 @@ public class Game extends Application {
         startButton.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                for (int i = 0; i< TOTAL_GOOMBA; i++){
-                    createGoomba();
-                }
-                startButton.setVisible(false);
-                startButtonPressed =true;
+                setNewGameVariables();
+                startGame();
             }
         });
+    }
+
+    private void startGame() {
+        //Spaw goombas
+        for (int i = 0; i< TOTAL_GOOMBA; i++){
+            createGoomba();
+        }
+        startButton.setVisible(false);
+        gameIsRunning =true;
     }
 
     private void setNewGameVariables() {
         mario.positionX=0;
         score=0;
         level=1;
-        startButtonPressed=false;
+        gameIsRunning =false;
         labelLevelUp.setText("");
     }
 
     private void labelsSetStyle() {
-        labelLevel.setTextFill(Color.web("#FFFFFF"));
+        labelLevel.setTextFill(Color.web("#000000"));
         labelLevel.setFont(new Font(MIN_FONT_SIZE));
-        StackPane.setAlignment(labelLevel, Pos.TOP_LEFT);
+        StackPane.setAlignment(labelLevel, Pos.BOTTOM_LEFT);
+        StackPane.setMargin(labelLevel, new Insets(0,0,20,15));
 
-        labelScore.setTextFill(Color.web("#ff6600"));
+        labelScore.setTextFill(Color.web("#FFFFFF"));
         labelScore.setFont(new Font(MIN_FONT_SIZE));
-        StackPane.setAlignment(labelScore, Pos.TOP_CENTER);
+        StackPane.setAlignment(labelScore, Pos.BOTTOM_RIGHT);
+        StackPane.setMargin(labelScore, new Insets(0,15,20,0));
 
         labelLevelUp.setTextFill(Color.web("#FF0000"));
         labelLevelUp.setFont(new Font(MAX_FONT_SIZE));
@@ -154,7 +191,10 @@ public class Game extends Application {
     private void updateLevel() {
             level++;
             score+=10;
+            labelLevelUp.setVisible(true);
             labelLevelUp.setText("LEVEL UP");
+
+            //Restart goomba position to top
             for (Goomba g :
                     goombas) {
                 int rangePos = (int) ((canvas.getWidth()-g.getWidth() - 0) + 1);
@@ -167,41 +207,39 @@ public class Game extends Application {
             }
     }
 
-   /* private void updateWindowSize() {
-        canvas.setWidth(theScene.getWidth());
-        canvas.setHeight(theScene.getHeight());
-    }*/
-
-    private void moveSprites() {
+    private void moveAndRenderSprites() {
         mario.move(canvas,elapsedTime);
+        mario.render(gc);
+
         for (Goomba g :
                 goombas) {
             g.move(canvas,elapsedTime);
-        }
-    }
-
-    private void renderSprites() {
-        mario.render(gc);
-        for (Goomba g :
-                goombas) {
             g.render(gc);
         }
     }
 
     private void clearScreen() {
+        //Clears the WHOLE screen (fixes every clearing issue)
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
     private void createGoomba() {
-        goomba = new Goomba();
+        Goomba goomba = new Goomba();
 
-        int rangePos = (int) ((canvas.getWidth()-goomba.getWidth() - 0) + 1);
+        //Calculates random X position
+        int rangePos = (int) ((canvas.getWidth()- goomba.getWidth() - 0) + 1);
         int randomPos=(int)(Math.random() * rangePos) + 0;
-        goomba.setPosition(randomPos,0-goomba.getHeight());
+        goomba.setPosition(randomPos,0 - goomba.getHeight());
 
+        //TODO: Check if collides goomba
+        checkSpriteCollision(goomba);
+
+        //Calculates random velocity
         int rangeVel = ((50 - 20) + 1);
         int randomVel = (int)(Math.random() * rangeVel) + 20;
         goomba.setVelocityY(randomVel*level);
+
+        //Adds new goomba to list
         goombas.add(goomba);
 
     }
@@ -220,22 +258,28 @@ public class Game extends Application {
         }
     }
 
-    private void checkSpriteCollision() {
+    private boolean checkSpriteCollision(Sprite sprite) {
         for (Goomba g :
                 goombas) {
-            if(mario.intersects(g)){
-                GameOver();
-                break;
+            if(sprite.intersects(g)){
+                gameOver();
+                return true;
+            }
+
+            if (g.intersects(sprite)) {
+                return true;
             }
         }
+
+        return false;
     }
 
-    private void GameOver() {
-        clearScreen();
-        labelLevelUp.setText("");
-        setNewGameVariables();
+    private void gameOver() {
         goombas.clear();
-        createGoomba();
+        clearScreen();
+       // setNewGameVariables();
         startButton.setVisible(true);
+        labelLevelUp.setVisible(false);
+        gameIsRunning=false;
     }
 }
