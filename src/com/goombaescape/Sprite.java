@@ -29,6 +29,8 @@ public class Sprite
     public void setImage(Image i)
     {
         image = i;
+        this.width = image.getWidth();
+        this.height = image.getHeight();
     }
 
     public void setImage(String filename)

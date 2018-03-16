@@ -242,8 +242,12 @@ public class Game extends Application {
         int randomPos=(int)(Math.random() * rangePos) + 0;
         goomba.setPosition(randomPos,0 - goomba.getHeight());
 
-//        //TODO: Check if collides goomba
-//        checkSpriteCollision(goomba);
+////        //TODO: Check if collides goomba
+//        while (checkSpriteCollision(goomba)) {
+//            rangePos = (int) ((canvas.getWidth()- goomba.getWidth() - 0) + 1);
+//            randomPos=(int)(Math.random() * rangePos) + 0;
+//            goomba.setPosition(randomPos,0 - goomba.getHeight());
+//        }
 
         //Calculates random velocity
         int rangeVel = ((50 - 20) + 1);
@@ -258,7 +262,7 @@ public class Game extends Application {
         Iterator<Goomba> i = goombas.iterator();
         while (i.hasNext()) {
             Goomba g = i.next(); // must be called before you can call i.remove()
-            if (g.isClicked(new Point2D(e.getSceneX(), e.getSceneY()))) {
+            if (g.isClicked(new Point2D(e.getX(), e.getY()))) {
                 i.remove();
                 score++;
                 createGoomba();

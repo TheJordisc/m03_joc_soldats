@@ -9,14 +9,13 @@ public class Mario extends Sprite{
     public Mario() {
         positionY=260;
         setVelocityX(160);
-        this.setWidth(100);
         this.setImage("/com/goombaescape/sprites/mario.png");
     }
 
     @Override
     public void move(Canvas canvas, double time) {
         //Reset Mario position when reaching goal line (out of screen)
-        if (positionX > canvas.getWidth()+ getWidth()) {
+        if (this.positionX > canvas.getWidth()+ this.getWidth()) {
             reachedGoal = true;
         }
 
