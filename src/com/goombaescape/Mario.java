@@ -1,5 +1,6 @@
 package com.goombaescape;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 
 public class Mario extends Sprite{
@@ -25,6 +26,11 @@ public class Mario extends Sprite{
         }else{
             positionX+= getVelocityX() * time;
         }
+    }
+
+    @Override
+    public Rectangle2D getBoundary() {
+        return new Rectangle2D(positionX,positionY,this.getWidth(),this.getHeight());
     }
 
     // Getters / setters

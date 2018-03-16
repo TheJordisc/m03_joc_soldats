@@ -99,8 +99,7 @@ public class Sprite
     }
 
     public boolean isClicked(Point2D p){
-        if (getBoundary().contains(p)) return  true;
-        else  return false;
+        return this.getBoundary().contains(p);
     }
 
     public String toString()
@@ -121,4 +120,7 @@ public class Sprite
         this.width = width;
     }
 
+    public void setHeight(double height) {
+        this.height = height;
+    }
 }

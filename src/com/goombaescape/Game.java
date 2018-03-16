@@ -78,7 +78,7 @@ public class Game extends Application {
         logoImage = new ImageView("/com/goombaescape/ui/logo.png");
 
         initLabels();
-        labelsSetStyle();
+        setLabelsStyle();
         setBackgroundImage();
         setNewGameVariables();
 
@@ -113,9 +113,10 @@ public class Game extends Application {
                         updateLevel();
                     }
 
-                    if (currentNanoTime/1000000000.0 >= levelUpTime/1000000000.0 + 3) {
+                    if (currentNanoTime/1000000000.0 >= levelUpTime/1000000000.0 + 2) {
                         labelLevelUp.setVisible(false);
                     }
+
                 }
 
             }
@@ -129,7 +130,7 @@ public class Game extends Application {
     }
 
     private void prepareStage(Stage theStage) {
-        theStage.setTitle( "Goomba Scape" );
+        theStage.setTitle( "Goomba Escape" );
         theStage.setScene( theScene );
         theStage.setWidth(STAGE_WIDTH);
         theStage.setHeight(STAGE_HEIGHT);
@@ -178,7 +179,7 @@ public class Game extends Application {
         labelLevelUp.setText("");
     }
 
-    private void labelsSetStyle() {
+    private void setLabelsStyle() {
         labelLevel.setTextFill(Color.web("#000000"));
         labelLevel.setFont(new Font(MIN_FONT_SIZE));
         StackPane.setAlignment(labelLevel, Pos.BOTTOM_LEFT);
@@ -191,7 +192,8 @@ public class Game extends Application {
 
         labelLevelUp.setTextFill(Color.web("#FF0000"));
         labelLevelUp.setFont(new Font(MAX_FONT_SIZE));
-        StackPane.setAlignment(labelLevelUp, Pos.CENTER);
+        StackPane.setAlignment(labelLevelUp, Pos.BOTTOM_CENTER);
+        StackPane.setMargin(labelLevelUp, new Insets(0,0,20,0));
 
         StackPane.setMargin(logoImage,new Insets(30,0,0,0));
         StackPane.setAlignment(logoImage,Pos.TOP_CENTER);
@@ -257,11 +259,10 @@ public class Game extends Application {
         while (i.hasNext()) {
             Goomba g = i.next(); // must be called before you can call i.remove()
             if (g.isClicked(new Point2D(e.getSceneX(), e.getSceneY()))) {
-                labelLevelUp.setText("");
                 i.remove();
                 score++;
                 createGoomba();
-                break; //break if element is unique
+                break;
             }
         }
     }
