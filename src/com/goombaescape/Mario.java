@@ -1,4 +1,4 @@
-package com.goombascape;
+package com.goombaescape;
 
 import javafx.scene.canvas.Canvas;
 
@@ -9,7 +9,7 @@ public class Mario extends Sprite{
         positionY=260;
         setVelocityX(160);
         this.setWidth(100);
-        this.setImage("/com/goombascape/sprites/mario.png");
+        this.setImage("/com/goombaescape/sprites/mario.png");
     }
 
     @Override

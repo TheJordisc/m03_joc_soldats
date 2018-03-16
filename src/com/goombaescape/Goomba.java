@@ -1,4 +1,4 @@
-package com.goombascape;
+package com.goombaescape;
 
 import javafx.scene.canvas.Canvas;
 
@@ -6,7 +6,7 @@ public class Goomba extends Sprite {
 
     public Goomba() {
         super();
-        this.setImage("/com/goombascape/sprites/goomba.png");
+        this.setImage("/com/goombaescape/sprites/goomba.png");
     }
 
     @Override

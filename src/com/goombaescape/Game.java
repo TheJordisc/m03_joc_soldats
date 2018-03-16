@@ -1,4 +1,4 @@
-package com.goombascape;
+package com.goombaescape;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -13,6 +13,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -42,6 +43,7 @@ public class Game extends Application {
     private double elapsedTime;
     private Scene theScene;
     private Image backgroundImage;
+    private ImageView logoImage;
     private boolean gameIsRunning;
     private StackPane root;
     private Button startButton;
@@ -73,11 +75,12 @@ public class Game extends Application {
 
         //Prepare new game and GUI
 
+        logoImage = new ImageView("/com/goombaescape/ui/logo.png");
+
         initLabels();
         labelsSetStyle();
         setBackgroundImage();
         setNewGameVariables();
-
 
 
         startButton = new Button("START");
@@ -85,7 +88,7 @@ public class Game extends Application {
         startButton.setFont(new Font("Arial", 50));
         createStartButtonListener();
 
-        root.getChildren().addAll(canvas,labelScore,labelLevel,labelLevelUp,startButton);
+        root.getChildren().addAll(canvas,labelScore,labelLevel,labelLevelUp,startButton,logoImage);
 
         //Prepare start time
         lastNanoTime = System.nanoTime();
@@ -141,7 +144,7 @@ public class Game extends Application {
     }
 
     private void setBackgroundImage() {
-        backgroundImage = new Image("/com/goombascape/sprites/bg.png");
+        backgroundImage = new Image("/com/goombaescape/ui/bg.png");
         root.setBackground(new Background(new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true))));
     }
 
@@ -160,7 +163,10 @@ public class Game extends Application {
         for (int i = 0; i< TOTAL_GOOMBA; i++){
             createGoomba();
         }
+
         startButton.setVisible(false);
+        logoImage.setVisible(false);
+
         gameIsRunning =true;
     }
 
@@ -186,6 +192,9 @@ public class Game extends Application {
         labelLevelUp.setTextFill(Color.web("#FF0000"));
         labelLevelUp.setFont(new Font(MAX_FONT_SIZE));
         StackPane.setAlignment(labelLevelUp, Pos.CENTER);
+
+        StackPane.setMargin(logoImage,new Insets(30,0,0,0));
+        StackPane.setAlignment(logoImage,Pos.TOP_CENTER);
     }
 
     private void updateLevel() {
@@ -231,8 +240,8 @@ public class Game extends Application {
         int randomPos=(int)(Math.random() * rangePos) + 0;
         goomba.setPosition(randomPos,0 - goomba.getHeight());
 
-        //TODO: Check if collides goomba
-        checkSpriteCollision(goomba);
+//        //TODO: Check if collides goomba
+//        checkSpriteCollision(goomba);
 
         //Calculates random velocity
         int rangeVel = ((50 - 20) + 1);
@@ -241,7 +250,6 @@ public class Game extends Application {
 
         //Adds new goomba to list
         goombas.add(goomba);
-
     }
 
     private void mouseCliked(MouseEvent e) {
@@ -279,6 +287,7 @@ public class Game extends Application {
         clearScreen();
        // setNewGameVariables();
         startButton.setVisible(true);
+        logoImage.setVisible(true);
         labelLevelUp.setVisible(false);
         gameIsRunning=false;
     }
